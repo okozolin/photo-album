@@ -45,7 +45,10 @@ export interface PhotoThumbnailProps {
     onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
-
+export interface TooltipProps {
+    title: string;
+    children: React.ReactNode;
+}
 export type UserData = {
     [id: number]: User; // Add index signature for number type
 };

@@ -3,6 +3,19 @@ import { CiCircleRemove } from "react-icons/ci";
 
 
 import {PhotoThumbnailProps} from '../types';
+import Tooltip from "./Tooltip";
+import styled from "styled-components";
+
+const CiCircleRemoveStyled = styled(CiCircleRemove)`
+  position: absolute;
+  top: 3px;
+  left: 130px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: black;
+  z-index: 2;
+`
 
 const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                                                            photo,
@@ -13,7 +26,6 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                                                            onDragOver
                                                        }) => {
     const handleRemove = () => {
-        console.log("XXX handleRemove in PhotoThumbnail============",photo.id )
         onRemove(photo.id);
     };
 
@@ -42,21 +54,13 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
             onDragOver={handleDragOver}
             data-photo-id={photo.id}
         >
-            <img
-                src={photo.thumbnailUrl}
-                alt={`Photo: ${photo.title}`}
-            />
-            <CiCircleRemove
-                style={{
-                position: 'absolute',
-                top: '3px',
-                left: '130px',
-                // padding: '4px',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'black',
-                }}
+            <Tooltip title={photo.title}>
+                <img
+                    src={photo.thumbnailUrl}
+                    alt={`Photo: ${photo.title}`}
+                />
+            </Tooltip>
+            <CiCircleRemoveStyled
                 onClick={handleRemove}
             />
         </div>

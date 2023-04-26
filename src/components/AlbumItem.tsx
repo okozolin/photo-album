@@ -43,7 +43,8 @@ const ExpandCollapse = styled(Column)`
 
 const GridContainer = styled.div`
   display: grid;
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
 `
 const AlbumItem: React.FC<AlbumItemProps> = ({
                                                  album,
@@ -119,7 +120,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
             </Row>
 
             {expanded && (
-                <GridContainer style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridGap: '10px'}}>
+                <GridContainer>
                     {photos.slice(0, MAX_PHOTOS_TO_DISPLAY).map(photo => (
                         <PhotoThumbnail
                             key={photo.id}
