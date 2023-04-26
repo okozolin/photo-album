@@ -1,14 +1,8 @@
 import React from 'react';
-import { Photo } from '../types';
+import { CiCircleRemove } from "react-icons/ci";
 
-interface PhotoThumbnailProps {
-    photo: Photo;
-    isDragging: boolean;
-    onRemove: (photoId: number) => void;
-    onDragStart: (photoId: number) => void;
-    onDragEnd: () => void;
-    onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
-}
+
+import {PhotoThumbnailProps} from '../types';
 
 const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                                                            photo,
@@ -19,6 +13,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                                                            onDragOver
                                                        }) => {
     const handleRemove = () => {
+        console.log("XXX handleRemove in PhotoThumbnail============",photo.id )
         onRemove(photo.id);
     };
 
@@ -38,9 +33,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
         <div
             style={{
                 opacity: isDragging ? 0.5 : 1,
-                border: '1px solid #000',
-                padding: '8px',
-                marginBottom: '8px'
+                position: 'relative',
             }}
             draggable={true}
             // onDrag
@@ -49,8 +42,23 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
             onDragOver={handleDragOver}
             data-photo-id={photo.id}
         >
-            <img src={photo.thumbnailUrl} alt={photo.title} />
-            <button onClick={handleRemove}>Remove</button>
+            <img
+                src={photo.thumbnailUrl}
+                alt={`Photo: ${photo.title}`}
+            />
+            <CiCircleRemove
+                style={{
+                position: 'absolute',
+                top: '3px',
+                left: '130px',
+                // padding: '4px',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'black',
+                }}
+                onClick={handleRemove}
+            />
         </div>
     );
 };

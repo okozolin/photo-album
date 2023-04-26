@@ -1,19 +1,12 @@
-import React, {useState} from 'react';
-import { MdExpandLess } from "react-icons/md";
-import {Album, Photo, User} from '../types';
+import React, {useEffect, useState} from 'react';
+import { MdOutlineExpandMore, MdExpandLess } from "react-icons/md";
+
+import {AlbumItemProps, Photo} from '../types';
 import PhotoThumbnail from './PhotoThumbnail';
 import styled from "styled-components";
 import {platformColors} from "../constants/colors";
 
-interface AlbumItemProps {
-    album: Album;
-    user: User,
-    expanded: boolean;
-    onExpandToggle: (albumId: number) => void;
-    onPhotoRemove: (albumId: number, photoId: number) => void;
-    onPhotoReorder: (albumId: number, photos: Photo[]) => void;
-}
-
+const MAX_PHOTOS_TO_DISPLAY = 12
 const Row = styled.div`
   display: flex;
   align-items: center;
@@ -48,30 +41,21 @@ const ExpandCollapse = styled(Column)`
   flex-basis: 10%;
 `;
 
+const GridContainer = styled.div`
+  display: grid;
+  gap: 16px;
+`
 const AlbumItem: React.FC<AlbumItemProps> = ({
                                                  album,
                                                  user ,
+                                                 photos,
                                                  expanded,
                                                  onExpandToggle,
                                                  onPhotoRemove,
                                                  onPhotoReorder
                                              }) => {
-    const [photos, setPhotos] = useState<Photo[]>([]);
     const [reorderedPhotos, setReorderedPhotos] = useState<Photo[]>([]);
     const [isDragging, setIsDragging] = useState<boolean>(false);
-
-    // useEffect(() => {
-    //     const getPhotos = async () => {
-    //         try {
-    //             const data = await fetchPhotos(album.id);
-    //             setPhotos(data);
-    //             setReorderedPhotos(data);
-    //         } catch (error) {
-    //             console.error(`Failed to fetch photos for album with ID ${album.id}:`, error);
-    //         }
-    //     };
-    //     getPhotos();
-    // }, [album.id]);
 
     const handleExpandToggle = () => {
         onExpandToggle(album.id);
@@ -112,29 +96,31 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
     };
 
     return (
-        <Row>
-            <AlbumName>
-                {album?.title}
-            </AlbumName>
-            <AlbumID>
-                {album?.id}
-            </AlbumID>
-            <UserName>
-                {user?.name}
-            </UserName>
-            <UserEmail>
-                {user?.email}
-            </UserEmail>
-            <ExpandCollapse
-                style={{ cursor: 'pointer', padding:"9px 10px 10px"}}
-                onClick={handleExpandToggle}
-            >
-                <MdExpandLess />
-                {/*{user?.email}*/}
-            </ExpandCollapse>
+        <>
+            <Row>
+                <AlbumName>
+                    {album?.title}
+                </AlbumName>
+                <AlbumID>
+                    {album?.id}
+                </AlbumID>
+                <UserName>
+                    {user?.name}
+                </UserName>
+                <UserEmail>
+                    {user?.email}
+                </UserEmail>
+                <ExpandCollapse
+                    style={{ cursor: 'pointer', padding:"9px 10px 10px"}}
+                    onClick={handleExpandToggle}
+                >
+                    {expanded ? <MdExpandLess /> : <MdOutlineExpandMore/>}
+                </ExpandCollapse>
+            </Row>
+
             {expanded && (
-                <div>
-                    {photos.map(photo => (
+                <GridContainer style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridGap: '10px'}}>
+                    {photos.slice(0, MAX_PHOTOS_TO_DISPLAY).map(photo => (
                         <PhotoThumbnail
                             key={photo.id}
                             photo={photo}
@@ -145,9 +131,9 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
                             onDragOver={handlePhotoDragOver}
                         />
                     ))}
-                </div>
+                </GridContainer>
             )}
-        </Row>
+        </>
     );
 };
 
