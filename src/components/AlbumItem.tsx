@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { MdOutlineExpandMore, MdExpandLess } from "react-icons/md";
 
 import {AlbumItemProps, Photo} from '../types';
-import PhotoThumbnail from './PhotoThumbnail';
 import styled from "styled-components";
 import {platformColors} from "../constants/colors";
+import PhotoGrid from "./Photos/PhotoGrid";
+import FullSizePhoto from "./Photos/FullSizePhoto";
 
 const MAX_PHOTOS_TO_DISPLAY = 12
 const Row = styled.div`
@@ -41,11 +42,6 @@ const ExpandCollapse = styled(Column)`
   flex-basis: 10%;
 `;
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
-`
 const AlbumItem: React.FC<AlbumItemProps> = ({
                                                  album,
                                                  user ,
@@ -55,8 +51,15 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
                                                  onPhotoRemove,
                                                  onPhotoReorder
                                              }) => {
-    const [reorderedPhotos, setReorderedPhotos] = useState<Photo[]>([]);
-    const [isDragging, setIsDragging] = useState<boolean>(false);
+    const [selectedPhoto, setSelectedPhoto] = useState<Photo | undefined>();
+    const handlePhotoClick = (photoId: number) => {
+        const selected = photos.find((p) => p.id === photoId)
+        setSelectedPhoto(selected);
+    };
+
+    const handlePhotoCloseClick = () => {
+        setSelectedPhoto(undefined);
+    };
 
     const handleExpandToggle = () => {
         onExpandToggle(album.id);
@@ -64,36 +67,6 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
 
     const handlePhotoRemove = (photoId: number) => {
         onPhotoRemove(album.id, photoId);
-    };
-
-    const handlePhotoDragStart = (photoId: number) => {
-        setIsDragging(true);
-    };
-
-    const handlePhotoDragEnd = () => {
-        setIsDragging(false);
-        onPhotoReorder(album.id, reorderedPhotos);
-    };
-
-    const handlePhotoDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        const dragOverPhotoId = Number(event.currentTarget.getAttribute('data-photo-id'));
-        const draggedPhotoId = Number(event.dataTransfer.getData('text/plain'));
-
-        if (dragOverPhotoId !== draggedPhotoId) {
-            setReorderedPhotos(prevPhotos => {
-                const updatedPhotos = [...prevPhotos];
-                const draggedPhotoIndex = updatedPhotos.findIndex(photo => photo.id === draggedPhotoId);
-                const dragOverPhotoIndex = updatedPhotos.findIndex(photo => photo.id === dragOverPhotoId);
-
-                [updatedPhotos[draggedPhotoIndex], updatedPhotos[dragOverPhotoIndex]] = [
-                    updatedPhotos[dragOverPhotoIndex],
-                    updatedPhotos[draggedPhotoIndex]
-                ];
-
-                return updatedPhotos;
-            });
-        }
     };
 
     return (
@@ -120,19 +93,20 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
             </Row>
 
             {expanded && (
-                <GridContainer>
-                    {photos.slice(0, MAX_PHOTOS_TO_DISPLAY).map(photo => (
-                        <PhotoThumbnail
-                            key={photo.id}
-                            photo={photo}
-                            isDragging={isDragging}
-                            onRemove={handlePhotoRemove}
-                            onDragStart={handlePhotoDragStart}
-                            onDragEnd={handlePhotoDragEnd}
-                            onDragOver={handlePhotoDragOver}
-                        />
-                    ))}
-                </GridContainer>
+                <>
+                    <PhotoGrid
+                        photos={photos.slice(0, MAX_PHOTOS_TO_DISPLAY)}
+                        onPhotoReorder={onPhotoReorder}
+                        onRemove={handlePhotoRemove}
+                        onPhotoClick={handlePhotoClick}
+                    />
+                    {selectedPhoto && (
+                        <FullSizePhoto
+                            selectedPhoto={selectedPhoto}
+                            onPhotoCloseClick={handlePhotoCloseClick} />
+                    )}
+
+                </>
             )}
         </>
     );

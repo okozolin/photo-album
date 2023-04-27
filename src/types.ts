@@ -18,12 +18,13 @@ export interface AlbumItemProps {
     expanded: boolean;
     onExpandToggle: (albumId: number) => void;
     onPhotoRemove: (albumId: number, photoId: number) => void;
-    onPhotoReorder: (albumId: number, photos: Photo[]) => void;
+    onPhotoReorder: (result: any) => void;
 }
 export interface Photo {
     id: number;
     title: string;
     thumbnailUrl: string;
+    url: string;
 }
 export interface User {
     id: number;
@@ -38,11 +39,9 @@ export interface User {
 
 export interface PhotoThumbnailProps {
     photo: Photo;
-    isDragging: boolean;
+    index: number
     onRemove: (photoId: number) => void;
-    onDragStart: (photoId: number) => void;
-    onDragEnd: () => void;
-    onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    onPhotoClick: (photoId: number) => void;
 }
 
 export interface TooltipProps {

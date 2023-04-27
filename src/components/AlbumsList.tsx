@@ -29,7 +29,7 @@ const AlbumsList: React.FC = () => {
                 if (expandedAlbumId !== null) {
                     const data = await fetchPhotos(expandedAlbumId);
                     setPhotos(data);
-                    setReorderedPhotos(data);
+                    // setReorderedPhotos(data);
                 }
             } catch (error) {
                 console.error(`Failed to fetch photos for album with ID ${expandedAlbumId}:`, error);
@@ -48,13 +48,30 @@ const AlbumsList: React.FC = () => {
         );
     };
 
-    const handlePhotoReorder = (albumId: number, photos: Photo[]) => {
-        setAlbums((prevAlbums : Album[]) =>
-            prevAlbums.map(album =>
-                album.id === albumId ? { ...album, photos } : album
-            )
-        );
-    };
+    const handlePhotoReorder = (result: any) => {
+        // setPhotos((prevPhotos : Photo[]) =>
+        //     prevPhotos.map(photo =>
+        //         photo.id === photoId ? { ...album, photos } : album
+        //     )
+        // );
+        const {destination, source, draggableId} = result
+        if (!destination) {
+            return
+        }
+
+        // check if the user simply moved the item and returned back to the same place
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return
+        }
+        const items = Array.from(photos);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+        setPhotos(items);
+    }
 
     return (
         <div>

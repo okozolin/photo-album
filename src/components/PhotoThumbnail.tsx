@@ -1,5 +1,6 @@
 import React from 'react';
 import { CiCircleRemove } from "react-icons/ci";
+import {Draggable} from "react-beautiful-dnd";
 
 
 import {PhotoThumbnailProps} from '../types';
@@ -19,50 +20,43 @@ const CiCircleRemoveStyled = styled(CiCircleRemove)`
 
 const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                                                            photo,
-                                                           isDragging,
+                                                           index,
                                                            onRemove,
-                                                           onDragStart,
-                                                           onDragEnd,
-                                                           onDragOver
+                                                           onPhotoClick
                                                        }) => {
-    const handleRemove = () => {
+
+    const handleRemove = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+        e.stopPropagation()
         onRemove(photo.id);
-    };
-
-    const handleDragStart = () => {
-        onDragStart(photo.id);
-    };
-
-    const handleDragEnd = () => {
-        onDragEnd();
-    };
-
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        onDragOver(event);
     };
 
     return (
         <div
             style={{
-                opacity: isDragging ? 0.5 : 1,
+                // opacity: isDragging ? 0.5 : 1,
                 position: 'relative',
             }}
-            draggable={true}
-            // onDrag
-            // Start={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onDragOver={handleDragOver}
-            data-photo-id={photo.id}
         >
-            <Tooltip title={photo.title}>
-                <img
-                    src={photo.thumbnailUrl}
-                    alt={`Photo: ${photo.title}`}
-                />
-            </Tooltip>
-            <CiCircleRemoveStyled
-                onClick={handleRemove}
-            />
+            <Draggable draggableId={`photo-${photo.id}`} index={index}>
+                {(provided)=> (
+                    <div
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        onClick={()=>onPhotoClick(photo.id)}
+                    >
+                        <Tooltip title={photo.title}>
+                            <img
+                                src={photo.thumbnailUrl}
+                                alt={`Photo: ${photo.title}`}
+                            />
+                        </Tooltip>
+                        <CiCircleRemoveStyled
+                            onClick={handleRemove}
+                        />
+                    </div>
+                )}
+            </Draggable>
         </div>
     );
 };
