@@ -1,10 +1,6 @@
 import React from "react";
-import {Photo} from "../../types";
+import {FullSizePhotoProps} from "../../types";
 
-interface FullSizePhotoProps {
-    selectedPhoto : Photo;
-    onPhotoCloseClick: () => void;
-}
 const FullSizePhoto: React.FC<FullSizePhotoProps> = ({
                                                          selectedPhoto,
                                                          onPhotoCloseClick

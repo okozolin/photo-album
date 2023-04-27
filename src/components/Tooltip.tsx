@@ -12,14 +12,12 @@ const TooltipWrapper = styled.div`
 `
 const TooltipStyle = styled.div`
   position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 25px;
   background: #000;
   color: #fff;
-  border-radius: 4px;
-  padding: 4px 8px;
-  opacity: 0.9;
+  border-radius: 6px;
+  padding: 16px 8px 16px 16px;
+  opacity: 0.8;
   transition: opacity 0.2s ease;
   width: 200px;
   pointer-events: none; // prevent flickering

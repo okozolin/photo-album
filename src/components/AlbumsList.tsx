@@ -2,14 +2,44 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Album, Photo, UserData} from '../types';
 import AlbumItem from './AlbumItem';
 import {fetchAlbums, fetchPhotos} from "../services/api";
-import Header from "./Header";
 import UsersContext from "../context/usersContext";
+import Row from "./Row";
+import {platformColors} from "../constants/colors";
+import {sizes} from "../constants/sizes";
+
+const header = [
+    {
+        content: "Album Name",
+        width: sizes.albumNameWidth,
+        color: platformColors.lila
+    },
+    {
+        content: "Album ID",
+        width: sizes.albumIdWidth,
+        color: platformColors.lila
+    },
+    {
+        content: "User Name",
+        width: sizes.userNameWidth,
+        color: platformColors.lila
+    },
+    {
+        content: "User Email",
+        width: sizes.userEmailWidth,
+        color: platformColors.lila
+    },
+    {
+        content: "Expand/Collapse",
+        width: sizes.expandCollapseWidth,
+        color: platformColors.lila
+    },
+
+]
 const AlbumsList: React.FC = () => {
     const usersData:UserData = useContext(UsersContext);
     const [albums, setAlbums] = useState<Album[]>([]);
     const [expandedAlbumId, setExpandedAlbumId] = useState<number | null>(null);
     const [photos, setPhotos] = useState<Photo[]>([]);
-    const [reorderedPhotos, setReorderedPhotos] = useState<Photo[]>([]);
 
     useEffect(() => {
         const getAlbums = async () => {
@@ -49,12 +79,7 @@ const AlbumsList: React.FC = () => {
     };
 
     const handlePhotoReorder = (result: any) => {
-        // setPhotos((prevPhotos : Photo[]) =>
-        //     prevPhotos.map(photo =>
-        //         photo.id === photoId ? { ...album, photos } : album
-        //     )
-        // );
-        const {destination, source, draggableId} = result
+        const {destination, source} = result
         if (!destination) {
             return
         }
@@ -75,7 +100,7 @@ const AlbumsList: React.FC = () => {
 
     return (
         <div>
-            <Header />
+            <Row fields={header} />
             {albums.map((album: Album) => (
                 <AlbumItem
                     key={album.id}

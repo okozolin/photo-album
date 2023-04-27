@@ -2,11 +2,16 @@ import React from 'react';
 import { CiCircleRemove } from "react-icons/ci";
 import {Draggable} from "react-beautiful-dnd";
 
-
 import {PhotoThumbnailProps} from '../types';
 import Tooltip from "./Tooltip";
 import styled from "styled-components";
 
+const DraggableContainer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 const CiCircleRemoveStyled = styled(CiCircleRemove)`
   position: absolute;
   top: 3px;
@@ -31,12 +36,7 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
     };
 
     return (
-        <div
-            style={{
-                // opacity: isDragging ? 0.5 : 1,
-                position: 'relative',
-            }}
-        >
+        <DraggableContainer>
             <Draggable draggableId={`photo-${photo.id}`} index={index}>
                 {(provided)=> (
                     <div
@@ -48,16 +48,16 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
                         <Tooltip title={photo.title}>
                             <img
                                 src={photo.thumbnailUrl}
-                                alt={`Photo: ${photo.title}`}
+                                alt={`${photo.title}`}
+                            />
+                            <CiCircleRemoveStyled
+                                onClick={handleRemove}
                             />
                         </Tooltip>
-                        <CiCircleRemoveStyled
-                            onClick={handleRemove}
-                        />
                     </div>
                 )}
             </Draggable>
-        </div>
+        </DraggableContainer>
     );
 };
 

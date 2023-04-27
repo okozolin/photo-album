@@ -6,11 +6,13 @@ import styled from "styled-components";
 import {platformColors} from "../constants/colors";
 import PhotoGrid from "./Photos/PhotoGrid";
 import FullSizePhoto from "./Photos/FullSizePhoto";
+import {sizes} from "../constants/sizes";
 
 const MAX_PHOTOS_TO_DISPLAY = 12
 const Row = styled.div`
   display: flex;
   align-items: center;
+  background-color: ${platformColors.lightGrey};
 `;
 
 const Column = styled.div`
@@ -23,23 +25,23 @@ const Column = styled.div`
   white-space: nowrap;
 `;
 const AlbumName = styled(Column)`
-  flex-basis: 40%;
+  flex-basis: ${sizes.albumNameWidth};
 `;
 
 const AlbumID = styled(Column)`
-  flex-basis: 10%;
+  flex-basis: ${sizes.albumIdWidth};
 `;
 
 const UserName = styled(Column)`
-  flex-basis: 20%;
+  flex-basis: ${sizes.userNameWidth};
 `;
 
 const UserEmail = styled(Column)`
-  flex-basis: 20%;
+  flex-basis: ${sizes.userEmailWidth};
 `;
 
 const ExpandCollapse = styled(Column)`
-  flex-basis: 10%;
+  flex-basis: ${sizes.expandCollapseWidth};
 `;
 
 const AlbumItem: React.FC<AlbumItemProps> = ({

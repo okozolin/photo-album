@@ -12,7 +12,16 @@ import {UserData} from "./types";
 const MyLogo = styled.div`
   color: ${platformColors.lightPink}
 `;
-
+const AppContainer = styled.div`
+  margin: 20px 100px;
+`
+const Header = styled.div`
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #232333;
+  font-size: 30px;
+`
 const App: React.FC = () => {
     const [users, setUsers] = useState<UserData>({});
     useEffect(() => {
@@ -30,12 +39,16 @@ const App: React.FC = () => {
 
     return (
         <UsersContext.Provider value={users}>
-          <MyLogo>
-             <MdFace color={platformColors.lightPink}/>
-              oritkozolin 2023
-          </MyLogo>
-          <h1>Albums</h1>
-          <AlbumsList />
+            <AppContainer>
+                <Header>
+                    <MyLogo>
+                        <MdFace color={platformColors.lightPink}/>
+                        oritkozolin 2023
+                    </MyLogo>
+                    <h1>Albums</h1>
+                </Header>
+                <AlbumsList />
+            </AppContainer>
         </UsersContext.Provider>
   );
 };

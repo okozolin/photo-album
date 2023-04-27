@@ -1,22 +1,15 @@
 import React from "react";
 import {DragDropContext} from "react-beautiful-dnd";
-import {Photo} from "../../types";
+import {PhotoGridProps} from "../../types";
 import PhotoThumbnail from "../PhotoThumbnail";
 import StrictModeDroppable from "./StrictModeDroppable";
 import styled from "styled-components";
-
-interface PhotoGridProps {
-    photos: Photo[];
-    onPhotoReorder: (result: any) => void;
-    onRemove: (result: any) => void;
-    onPhotoClick: (result: any) => void;
-
-}
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
+  margin: 20px 0;
 `
 const PhotoGrid: React.FC<PhotoGridProps> = ({
                                                   photos,
